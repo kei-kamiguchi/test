@@ -2,10 +2,10 @@ name: Ruby
 
 on:
   push:
-  
+
 permissions:
   contents: read
-  issues: write 
+  issues: write
 
 jobs:
   build:
@@ -26,13 +26,16 @@ jobs:
         with:
           ruby-version: 3.0.1
           bundler-cache: true
+        continue-on-error: true
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
           node-version: '14'
           check-latest: true
+        continue-on-error: true
       - name: Install Yarn
         run: yarn --frozen-lockfile
+        continue-on-error: true
       - name: Create Evaluation File
         run: |
           rm -rf spec
