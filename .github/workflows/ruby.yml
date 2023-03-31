@@ -26,20 +26,16 @@ jobs:
         with:
           ruby-version: 3.0.1
           bundler-cache: true
-        continue-on-error: true
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
           node-version: '14'
           check-latest: true
-        continue-on-error: true
       - name: Install Yarn
         run: yarn --frozen-lockfile
-        continue-on-error: true
       - name: Create Evaluation File
         run: |
           rm -rf spec
-          echo -e "---\ntitle: DIVE INTO CODE：課題評価に関するご連絡\n---\n## 課題の評価が実行できませんでした。\n### 以下の項目を確認してください。\n- RSpecの実行に必要なgem（rspec-railsとrexml）をインストールしていますか？\n- ローカルでRspecを実行できていますか？\n**上記を確認して解決しない場合、お手数ですが、DIVERの質問投稿画面にこちらのリポジトリのURLを投稿いただき、課題の評価が行われない旨をお知らせください。**" > .github/execution_error_template.md
           git clone https://github.com/diveintocode-corp/cdp_web_rails_gem_task_evaluation_code.git spec
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -65,6 +61,8 @@ jobs:
           filename: .github/feedback_template.md
       - uses: JasonEtco/create-an-issue@v2
         if: failure()
+        run: |
+          echo -e "---\ntitle: DIVE INTO CODE：課題評価に関するご連絡\n---\n## 課題の評価が実行できませんでした。\n### 以下の項目を確認してください。\n- RSpecの実行に必要なgem（rspec-railsとrexml）をインストールしていますか？\n- ローカルでRspecを実行できていますか？\n**上記を確認して解決しない場合、お手数ですが、DIVERの質問投稿画面にこちらのリポジトリのURLを投稿いただき、課題の評価が行われない旨をお知らせください。**" > .github/execution_error_template.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
